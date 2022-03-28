@@ -51,16 +51,13 @@ def main():
                 text = page.extract_text()
                 text = " ".join(text.split())
                 if  find == False:
-                    
-                    
-
                     #Obteniendo la palabra clave #1: Vida Grupo Deudor
                     start = ['PRODUCTO']
                     end = ['Producto 3406']
                     keyword1 = get_keyword(start, end, text)
-
                     find = True
                     print('salir '+str(find))
+                    
                 #Obteniendo la palabra clave #2: 3406
                 start = ['PRODUCTO VIDA GRUPO DEUDOR Producto']
                 end = ['']
