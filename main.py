@@ -16,7 +16,7 @@ text = texto extraído de la pág. seleccionada.
 """
 
 def get_keyword(start, end, text):
-    print(start)
+    
     for i in range(len(start)):
         try:
             field = ((text.split(start[i]))[1].split(end[i])[0])
@@ -27,7 +27,8 @@ def get_keyword(start, end, text):
 def main():
     my_dataframe = pd.DataFrame()
     find = False
-    for files in glob.glob("C:\Cursos\pdfs\*.pdf"):
+    find2 = False
+    for files in glob.glob("C:\Cursos\Extract_Text\pdfs\*.pdf"):
         with pdfplumber.open(files) as pdf:
 
             var = 0
@@ -50,19 +51,24 @@ def main():
                 #print (page)
                 text = page.extract_text()
                 text = " ".join(text.split())
+                    
                 if  find == False:
                     #Obteniendo la palabra clave #1: Vida Grupo Deudor
                     start = ['PRODUCTO']
                     end = ['Producto 3406']
                     keyword1 = get_keyword(start, end, text)
-                    find = True
-                    print('salir '+str(find))
+                    if keyword1 != None:
+                        find = True
                     
-                #Obteniendo la palabra clave #2: 3406
-                start = ['PRODUCTO VIDA GRUPO DEUDOR Producto']
-                end = ['']
-                keyword2 = get_keyword(start, end, text)
-
+                
+                if  find2 == False:
+                    #Obteniendo la palabra clave #2: 3406
+                    start = ['Producto']
+                    end = ['1. INFORMACION BASICA']
+                    keyword2 = get_keyword(start, end, text)
+                    if keyword2 != None:
+                        find2 = True
+                    
                 #Obteniendo la palabra clave #3: 2158-8-2019
                 start = ['PROPUESTA – (']
                 end = [') TOMADOR BANCO MUNDO MUJER S.A.']
@@ -78,15 +84,19 @@ def main():
                 end = ['ACTIVIDAD']
                 keyword5 = get_keyword(start, end, text)
                 
+                
+                
                 #Obteniendo la palabra clave #6: Menores 74 años
                 start = ['Máximo valor por deudor']
-                end = ['El máximo valor asegurado por persona en uno o varios créditos']
+                end = ['El máximo valor asegurado por persona en uno o varios créditos, será de 450 SMMLV.']
                 keyword6 = get_keyword(start, end, text)
+                print(keyword6)
                 
                 #Obteniendo la palabra clave #7: Mayores o iguales 74 años
                 start = ['será de 450 SMMLV.']
-                end = ['El máximo valor asegurado por persona en uno o varios créditos']
+                end = ['El máximo valor asegurado por persona en uno']
                 keyword7 = get_keyword(start, end, text)
+                print(keyword7)
                 
                 my_list = [keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7]
                
@@ -97,9 +107,10 @@ def main():
                     #cont1 = cont1 + 1
                 var1 = var1 + 1
                 keyword1 = None
+                keyword2 = None
                 
                 
-            print("Palabras extraídas con éxito")
+            print("Fin de la ejecución")
             
             
             my_dataframe = my_dataframe.rename(columns={0:'Producto',
@@ -107,10 +118,10 @@ def main():
                                                         2:'#Cotización',
                                                         3:'Tomador',
                                                         4:'NIT',
-                                                        5:'Cobertura',
-                                                        6:'Cobertura'})
+                                                        5:'Cobertura Grupo 1',
+                                                        6:'Cobertura Grupo 2'})
 
-            save_path = ('C:\Cursos\docExcel')
+            save_path = ('C:\Cursos\Extract_Text\docExcel')
             os.chdir(save_path)
             my_dataframe.to_excel('documento.xlsx', sheet_name= 'Hoja 1')
 
